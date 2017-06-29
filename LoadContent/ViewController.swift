@@ -10,9 +10,31 @@ import UIKit
 
 class ViewController: UIViewController {
 
+   
+   @IBOutlet weak var label: UILabel!
+   
    override func viewDidLoad() {
       super.viewDidLoad()
-      // Do any additional setup after loading the view, typically from a nib.
+      
+      if let url = URL(string: "https://www.stackoverflow.com") {
+         let request = NSMutableURLRequest(url: url);
+         let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            if error != nil {
+               print(error)
+            } else {
+               if let unrappedData = data {
+                  let dataString = NSString(data: unrappedData, encoding: String.Encoding.utf8.rawValue)
+                  print(dataString)
+                  DispatchQueue.main.sync {
+                     self.label.text = "http://www.stackoverflow.com"
+                  }
+               }
+            }
+         }
+         task.resume()
+      }
+      
    }
 
    override func didReceiveMemoryWarning() {
